@@ -1,0 +1,56 @@
+﻿@model  IEnumerable<ChatManager.Models.User>
+@{
+    ViewBag.Title = "UserList";
+    var currentUser = ChatManager.Models.OnlineUsers.GetSessionUser();
+    var friendships = ChatManager.Models.Friendships.ListFriend;
+    var friend = ChatManager.Models.DB.Friendships;
+    var login = ChatManager.Models.DB.Logins;
+    var chat = ChatManager.Models.DB.Chat;
+
+}
+@if (Model != null)
+{
+
+    foreach (var item in Model)
+    {
+        //var isAcceptedFriend = friendships.Any(f =>
+        //    (f.DemandantId == item.Id && f.ReceveurId == currentUser.Id ||
+        //    f.DemandantId == currentUser.Id && f.ReceveurId == item.Id) &&
+        //    f.States[1] == true);
+
+        var lastSeenTime = login.Get(currentUser.Id).LogoutDate; 
+
+
+        var isAcceptedFriend2 = friend.FriendshipStatus(currentUser.Id, item.Id) == 1 || friend.FriendshipStatus(currentUser.Id, item.Id) == 5;
+        if (isAcceptedFriend2 && item.Id != ChatManager.Models.OnlineUsers.GetSessionUser().Id)
+        {
+
+            var newMessages = chat.ToList()
+                .Where(c => c.EnvoyeurId == item.Id && c.ReceveurId == currentUser.Id && c.MessageDate > lastSeenTime)
+                .OrderByDescending(c => c.MessageDate);
+
+            if ((int)Session["CurrentId"] == 0 || (int)Session["CurrentId"] != item.Id)
+            {
+
+                <div class="unselectedTarget" userid="@item.Id">
+                    <div title="@item.GetFullName()" class="UserSmallAvatar" style="background: url(@Url.Content(item.GetAvatarURL()))">
+                        @if (newMessages.Any())
+                        {
+                            <div class="newMessagesIndicator"></div>
+                        }
+                    </div>
+                </div>
+            }
+            else
+            {
+                if ((int)Session["CurrentId"] == item.Id)
+                {
+                    <div class="selectedTarget" userid="@item.Id">
+                        <div title="@item.GetFullName()" class="UserSmallAvatar" style="background: url(@Url.Content(item.GetAvatarURL()))">
+                        </div>
+                    </div>
+                }
+            }
+        }
+    }
+}

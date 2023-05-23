@@ -1,0 +1,27 @@
+﻿@model ChatManager.Models.User
+
+
+<h2>Edit</h2>
+<hr />
+
+<div class="main">
+    @{
+        ViewBag.Title = "Edit";
+        Html.RenderPartial("ProfilForm");
+    }
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/NotificationsHandler")
+    <script defer>
+        $.validator.addMethod(
+            "UserTypeId",
+            function (value, element) { return ($("input[name='UserTypeId']:checked").val() != undefined); },
+            "Choix obligatoire"
+        );
+        $(".placeholder").click(function () {
+            var userId = $(this).attr("userid");
+            ajaxActionCall("/Chat/GetId/" + userId);
+        })
+    </script>
+}

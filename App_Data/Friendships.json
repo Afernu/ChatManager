@@ -1,0 +1,47 @@
+[
+  {
+    "Id": 1,
+    "DemandantId": 11,
+    "ReceveurId": 9,
+    "IsFriends": true,
+    "IsUnknown": false,
+    "IsRequesting": false,
+    "States": [ false, true, false ]
+  },
+  {
+    "Id": 2,
+    "DemandantId": 9,
+    "ReceveurId": 10,
+    "IsFriends": true,
+    "IsUnknown": false,
+    "IsRequesting": false,
+    "States": [ false, true, false ]
+  },
+  {
+    "Id": 3,
+    "DemandantId": 12,
+    "ReceveurId": 9,
+    "IsFriends": true,
+    "IsUnknown": false,
+    "IsRequesting": false,
+    "States": [ false, true, false ]
+  },
+  {
+    "Id": 4,
+    "DemandantId": 12,
+    "ReceveurId": 10,
+    "IsFriends": false,
+    "IsUnknown": false,
+    "IsRequesting": true,
+    "States": [ true, false, false ]
+  },
+  {
+    "Id": 5,
+    "DemandantId": 12,
+    "ReceveurId": 11,
+    "IsFriends": false,
+    "IsUnknown": false,
+    "IsRequesting": true,
+    "States": [ true, false, false ]
+  }
+]

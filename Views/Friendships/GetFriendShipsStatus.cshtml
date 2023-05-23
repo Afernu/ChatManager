@@ -1,0 +1,102 @@
+﻿@model  IEnumerable<ChatManager.Models.User>
+@{
+    ViewBag.Title = "UserList";
+    var currentUser = ChatManager.Models.OnlineUsers.GetSessionUser();
+    var friendships = ChatManager.Models.Friendships.ListFriend; //mtn, ca check pas pour les autres userv
+}
+
+@if (Model != null)
+{
+    foreach (var item in Model)
+    {
+        var isBlocked = item.Blocked; // plus tard
+        var hasWaitingRequest = friendships.Any(f => f.DemandantId == item.Id && f.ReceveurId == currentUser.Id);
+        var hasSentRequest = friendships.Any(f => f.ReceveurId == item.Id && f.DemandantId == currentUser.Id);
+        var canSendFriendRequest = !hasWaitingRequest && !hasSentRequest;
+        var isAcceptedFriend = friendships.Any(f =>
+            (f.DemandantId == item.Id && f.ReceveurId == currentUser.Id ||
+            f.DemandantId == currentUser.Id && f.ReceveurId == item.Id) &&
+            f.States[1] == true);
+        var isDeclined = friendships.Any(f =>
+            (f.DemandantId == item.Id && f.ReceveurId == currentUser.Id ||
+            f.DemandantId == currentUser.Id && f.ReceveurId == item.Id) &&
+            f.States[2] == true);
+
+        bool isOnline = ChatManager.Models.OnlineUsers.IsOnLine(item.Id);
+
+        if (item.Id != ChatManager.Models.OnlineUsers.GetSessionUser().Id)
+        {
+            <div class="friendContainer" style="font-size:14px;">
+                <a href="mailto:@item.Email" title="@item.CreationDate">
+                    <div class="userItem">
+                        @Helper.AvatarUser(item, "UserSmallAvatar")
+                    </div>
+                </a>
+                @Helper.OnLineStatusIcon(isOnline, item.Blocked)
+
+                @if (isBlocked)
+                {
+                    <span class="icon fa command red fa-ban" title="Utilisateur @item.GetFullName() est blocker"></span>
+                }
+
+                @if (canSendFriendRequest && !isBlocked)
+                {
+                    if (!isDeclined)
+                    {
+                        <span class="icon fa command icon fa green fa-plus-circle" title="Envoyer une demande d'ami @item.GetFullName()" url="/Friendships/SendFriendshipRequest/@item.Id" message="Envoyer une demande d'ami a @item.GetFullName()"></span>
+                        @*@Helper.IconConfirmAjaxCmd("Friendships", "SendFriendshipRequest/" + item.Id, "command icon fa green fa-plus-circle", $"Envoyer une demande d'ami a {item.GetFullName()}")*@
+                    }
+                }
+                @*partie demandeur*@
+                @if (hasSentRequest && !isDeclined && !isBlocked)
+                {
+                    if (isAcceptedFriend)
+                    {
+                        <div class="icon fa green fa-check-circle" title="Vous etes amis avec @item.GetFullName()"></div>
+                        <span class="command icon fa red fa-times" url="/Friendships/RemoveRequest/@item.Id" message="Retirer la demande d'amitié avec @item.GetFullName()" title="Retirer la demande d'amitié avec @item.GetFullName()"></span>
+                    }
+                    else
+                    {
+                        <span class="icon fa green fa-clock-o" title="Requête d'amitié avec @item.GetFullName()  en attente"></span>
+                        <span class="command icon fa red fa-times" url="/Friendships/RemoveRequest/@item.Id" message="Retirer la demande d'amitié avec @item.GetFullName()" title="Retirer la demande d'amitié avec @item.GetFullName()"></span>
+                        @*@Helper.IconConfirmAjaxCmd("Friendships", "RemoveRequest/" + item.Id, "command icon fa red fa-times", $"Retirer la demande d'amitié avec {item.GetFullName()}")*@
+                    }
+
+                }
+                else
+                {
+                    if (isDeclined && hasSentRequest)
+                    {
+                        <div class="icon fa red fa-times-circle" title="Demande d'amitier decliner par l'usager cibler"></div>
+                    }
+                }
+                @*partie receveur*@
+                @if (hasWaitingRequest && !isBlocked)
+                {
+                    if (isDeclined)
+                    {
+                        <span class="icon fa command icon fa green fa-plus-circle" title="Envoyer une demande d'ami @item.GetFullName()" url="/Friendships/SendFriendshipRequest/@item.Id" message="Envoyer une demande d'ami a @item.GetFullName()"></span>
+                        @*@Helper.IconConfirmAjaxCmd("Friendships", "SendFriendshipRequest/" + item.Id, "command icon fa green fa-plus-circle", $"Envoyer une demande d'ami a {item.GetFullName()}")*@
+                    }
+                    else
+                    {
+                        if (isAcceptedFriend && !isBlocked)
+                        {
+                            <div class="icon fa green fa-check-circle" title="Vous etes amis avec @item.GetFullName()"></div>
+                            <span class="command icon fa red fa-times" url="/Friendships/RemoveRequest/@item.Id" message="Retirer la demande d'amitié avec @item.GetFullName()" title="Retirer la demande d'amitié avec @item.GetFullName()"></span>
+                        }
+                        else
+                        {
+                            <span class="command icon fa green fa-check" url="/Friendships/AcceptFriendshipRequest/@item.Id" message="Accepter la demande d'amitier de @item.GetFullName()" title="Accepter la demande d'amitier de @item.GetFullName()"></span>
+
+                            @*@Helper.IconConfirmAjaxCmd("Friendships", "AcceptFriendshipRequest/" + item.Id, "command icon fa green fa-check", $"Accepter la demande d'amitier de {item.GetFullName()}")*@
+                            <span class="command icon fa red fa-times" url="/Friendships/DenyRequest/@item.Id" message="Retirer la demande d'amitier avec @item.GetFullName()" title="Retirer la demande d'amitier avec @item.GetFullName()"></span>
+
+                            @*@Helper.IconConfirmAjaxCmd("Friendships", "DenyRequest/" + item.Id, "command icon fa red fa-times", $"Retirer la demande d'amitier avec {item.GetFullName()}")*@
+                        }
+                    }
+                }
+            </div>
+        }
+    }
+}
