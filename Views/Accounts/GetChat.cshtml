@@ -20,18 +20,27 @@
         {
             <div class="userContainer" style="font-size:14px;">
                 <a href="@Url.Action("EditUser","Accounts")" class="placeholder">
-                    @Helper.AvatarUser(user.FindUser(item.ReceveurId), "UserSmallAvatar")
+                    @Helper.AvatarProfilLink(user.FindUser(item.EnvoyeurId))
                 </a>
-            </div>
-            @*<div class="sentLayout">
-                <div class="sent" title="@item.MessageDate.ToShortTimeString()" id="sent_@item.Id" utc="@item.MessageDate.ToFileTimeUtc()">
-                    <span class="token">@Helper.ParseContent(@item.Message)</span>
+                <div style="text-align:right">
+                    <a href="@Url.Action("EditUser","Accounts")" class="placeholder">
+                        @Helper.AvatarProfilLink(user.FindUser(item.ReceveurId))
+                    </a>
                 </div>
-            </div>*@
-            <div class="userContainer" style="font-size:14px;">
-                <a href="@Url.Action("EditUser","Accounts")" class="placeholder">
-                    @Helper.AvatarUser(user.FindUser(item.EnvoyeurId), "UserSmallAvatar")
-                </a>
-            </div>}
+
+                <div style="text-align:center">
+                    <div id="delete_@item.Id" class="DELETE_CHAT icon blue fa fa-times-circle" title="Effacer le chat"></div>
+                </div>
+                <div style="text-align:center" title="Status du compte">
+                </div>
+                <div style="text-align:center">
+                    <div class="sentLayout">
+                        <div class="sent" title="@item.MessageDate.ToShortTimeString()" id="sent_@item.Id" utc="@item.MessageDate.ToFileTimeUtc()">
+                            <span class="token">@Helper.ParseContent(@item.Message)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
     }
 }

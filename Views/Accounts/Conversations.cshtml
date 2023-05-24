@@ -24,10 +24,10 @@
                     GetUsersList.command("@Url.Action("ChangeUserBlockedStatus")" + "?userid=" + userid + "&blocked=" + this.checked.toString());
                 }
             );
-            $(".DELETE_USER").click(
+            $(".DELETE_CHAT").click(
                 function () {
                     let userid = this.id.split('_')[1];
-                    GetUsersList.confirmedCommand(this.title + ' ?', "@Url.Action("Delete")" + "?userid=" + userid);
+                    GetUsersList.confirmedCommand(this.title + ' ?', "@Url.Action("Delete_Chat")" + "?userid=" + userid);
                 }
             );
             $(".SwitchToUser").click(function () {

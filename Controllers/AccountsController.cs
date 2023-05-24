@@ -340,6 +340,11 @@ namespace ChatManager.Controllers
 
         #region Administrator actions
         [OnlineUsers.AdminAccess]
+        public JsonResult DELETE_CHAT(int userid)
+        {
+            return Json(DB.Chat.Delete_Chat(userid),JsonRequestBehavior.AllowGet);
+        }
+        [OnlineUsers.AdminAccess]
         public ActionResult Conversations()
         {
             return View();
@@ -349,7 +354,7 @@ namespace ChatManager.Controllers
         {
             if (forceRefresh || OnlineUsers.HasChanged() || DB.Chat.HasChanged)
             {
-                return PartialView(DB.Chat.ToList());
+                return PartialView(DB.Chat.ToList().OrderByDescending(u => u.Id));
             }
             return null;
         }
