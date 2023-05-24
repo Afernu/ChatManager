@@ -39,8 +39,8 @@
                 @Html.ValidationMessageFor(model => model.UserTypeId, "", new { @class = "text-danger" })
             </fieldset>
             <fieldset class="formField">
-                <div class="legend">Verifier @Html.CheckBox("Verifier", Model.Verified)</div>
-                <div class="legend">Bloquer @Html.CheckBox("Bloqued", Model.Blocked)
+                <div class="legend">Verifier @Html.CheckBoxFor(model => model.Verified)</div>
+                <div class="legend">Bloquer @Html.CheckBoxFor(model => model.Blocked)
                 </div>
             </fieldset>
         }
@@ -90,13 +90,11 @@
         {
             if (isAdmin)
             {
-                @Html.HiddenFor(model => model.Verified)
                 @Html.HiddenFor(model => model.Password)
                 @Html.HiddenFor(model => model.ConfirmPassword)
                 @Html.HiddenFor(model => model.GenderId)
                 @Html.HiddenFor(model => model.Avatar)
                 @Html.HiddenFor(model => model.AvatarImageData)
-                @Html.HiddenFor(model => model.Blocked);
             }
         }
 

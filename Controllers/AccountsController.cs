@@ -370,16 +370,6 @@ namespace ChatManager.Controllers
         public ActionResult EditUser(User user)
         {
             User currentUser = DB.Users.FindUser(user.Id);
-            //user.AvatarImageData = user.AvatarImageData;
-            //user.FirstName = user.FirstName;
-            //user.LastName = user.LastName;
-            //user.ConfirmEmail = originalUser.ConfirmEmail;
-            //user.ConfirmPassword = originalUser.ConfirmPassword;
-            //user.UserTypeId = user.UserTypeId;
-            //user.Password = originalUser.Password;
-            //user.GenderId = originalUser.GenderId;
-            //if (user.AvatarImageData == null)
-            //    user.AvatarImageData = originalUser.AvatarImageData;
 
             string newEmail = "";
             if (user.Email != currentUser.Email)
@@ -424,6 +414,12 @@ namespace ChatManager.Controllers
         [OnlineUsers.AdminAccess]
         public JsonResult Delete(int userid)
         {
+            //check pour tout ces chats et delete un par 1
+            var userChat = DB.Chat.ToList().Where(u => u.EnvoyeurId == userid || u.ReceveurId == userid);
+            foreach (var chat in userChat)
+            {
+                DB.Chat.Delete(chat.Id);
+            }
             return Json(DB.Users.Delete(userid), JsonRequestBehavior.AllowGet);
         }
         [OnlineUsers.AdminAccess]
