@@ -52,7 +52,7 @@ namespace ChatManager.Models
             try
             {
                 Chat chat = DB.Chat.FindChat(id);
-                if(chat.EnvoyeurId == OnlineUsers.GetSessionUser().Id)
+                if(chat.EnvoyeurId == OnlineUsers.GetSessionUser().Id || OnlineUsers.GetSessionUser().IsAdmin)
                 {
                     DB.Chat.Delete(id);
                 }

@@ -27,17 +27,14 @@
                         @Helper.AvatarProfilLink(user.FindUser(item.ReceveurId))
                     </a>
                 </div>
-
-                <div style="text-align:center">
-                    <div id="delete_@item.Id" class="DELETE_CHAT icon blue fa fa-times-circle" title="Effacer le chat"></div>
-                </div>
-                <div style="text-align:center" title="Status du compte">
-                </div>
-                <div style="text-align:center">
-                    <div class="sentLayout">
-                        <div class="sent" title="@item.MessageDate.ToShortTimeString()" id="sent_@item.Id" utc="@item.MessageDate.ToFileTimeUtc()">
-                            <span class="token">@Helper.ParseContent(@item.Message)</span>
-                        </div>
+            </div>
+            <div style="text-align:center">
+                <div id="delete_@item.Id" class="DELETE_CHAT icon blue fa fa-times-circle" title="Effacer le chat"></div>
+            </div>
+            <div style="text-align:center">
+                <div class="messageTime">
+                    <div class="sent" title="@item.MessageDate.ToShortTimeString()" id="sent_@item.Id" utc="@item.MessageDate.ToFileTimeUtc()">
+                        <span class="token">@Helper.ParseContent(@item.Message)</span>
                     </div>
                 </div>
             </div>
