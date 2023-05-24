@@ -339,7 +339,20 @@ namespace ChatManager.Controllers
         #endregion
 
         #region Administrator actions
-
+        [OnlineUsers.AdminAccess]
+        public ActionResult Conversations()
+        {
+            return View();
+        }
+        [OnlineUsers.AdminAccess]
+        public ActionResult GetChat(bool forceRefresh = false)
+        {
+            if (forceRefresh || OnlineUsers.HasChanged() || DB.Chat.HasChanged)
+            {
+                return PartialView(DB.Chat.ToList());
+            }
+            return null;
+        }
         private int CurrentTarget
         {
             get

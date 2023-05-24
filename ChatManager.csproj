@@ -274,8 +274,10 @@
     <Content Include="Views\Friendships\GetFriendShipsStatus.cshtml" />
     <Content Include="Views\Chat\Index.cshtml" />
     <Content Include="Views\Chat\GetFriendsList.cshtml" />
-    <Content Include="Views\Chat\GetMessages.cshtml" />
     <Content Include="Views\Accounts\EditUser.cshtml" />
+    <Content Include="Views\Accounts\Conversations.cshtml" />
+    <Content Include="Views\Chat\GetMessages.cshtml" />
+    <Content Include="Views\Accounts\GetChat.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

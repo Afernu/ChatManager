@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Conversations";
+}
+
+<h2>Conversations</h2>
+<hr />
+<div class="main">
+    <div id="MessageListContainer">
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/NotificationsHandler")
+
+    <script defer>
+        let GetUsersList = new PartialRefresh("@Url.Action("GetChat")", "MessageListContainer", 5, UpdateCheckboxChangeCallback);
+
+        function UpdateCheckboxChangeCallback() {
+            // renew checkbox change call back
+            $(".CB_Blocked").change(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.command("@Url.Action("ChangeUserBlockedStatus")" + "?userid=" + userid + "&blocked=" + this.checked.toString());
+                }
+            );
+            $(".DELETE_USER").click(
+                function () {
+                    let userid = this.id.split('_')[1];
+                    GetUsersList.confirmedCommand(this.title + ' ?', "@Url.Action("Delete")" + "?userid=" + userid);
+                }
+            );
+            $(".SwitchToUser").click(function () {
+                window.location = "/Accounts/SwitchToUser/" + $(this).attr("id");
+            })
+            $(".placeholder").click(function () {
+                var userId = $(this).attr("userid");
+                ajaxActionCall("/Accounts/GetId/" + userId);
+            })
+        }
+    </script>
+}
+
+
